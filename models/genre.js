@@ -2,15 +2,15 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const genreSchema = Joi.object({
-  name: Joi.string().min(3).required(),
+  name: Joi.string().required().min(3).max(255).trim(),
 });
 
-const Genre = mongoose.model('Genre', new mongoose.Schema({
+const genreSchemaMongoose = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 32,
+    maxlength: 255,
     trim: true,
     validate: {
       validator: function(value) {
@@ -19,7 +19,10 @@ const Genre = mongoose.model('Genre', new mongoose.Schema({
       message: 'A genre needs a name that is 3 to 32 characters long.'
     }
   }
-}));
+});
 
-module.exports.genreSchema = genreSchema;
+const Genre = mongoose.model('Genre', genreSchemaMongoose);
+
+module.exports.genreSchema = genreSchema; // Joi, for validation
+module.exports.genreSchemaMongoose = genreSchemaMongoose; // Mongoose, for embedding documents
 module.exports.Genre = Genre;
