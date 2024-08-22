@@ -17,17 +17,14 @@ router.get('/:id', async (request, response) => {
 });
 
 router.post('/', async (request, response) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-  
   try {
     const {error, value} = rentalSchema.validate(request.body);
     if (error) return response.status(400).json({errors: error.details.map(error => error.message)});
   
-    const customer = await Customer.findById(value.customerId).session(session);
+    const customer = await Customer.findById(value.customerId);
     if (!customer) return response.status(404).json({errors: ['There is no customer with that id.']});
     
-    const movie = await Movie.findById(value.movieId).session(session);
+    const movie = await Movie.findById(value.movieId);
     if (!movie) return response.status(404).json({errors: ['There is no movie with that id.']});
     
     if (movie.numberInStock === 0) return response.status(400).json({errors: ['The movie is not in stock.']});
@@ -46,18 +43,13 @@ router.post('/', async (request, response) => {
       }
     });
     
-    const result = await rental.save({session});
+    const result = await rental.save();
     movie.numberInStock--;
-    await movie.save({session});
-    
-    await session.commitTransaction();
-    await session.endSession();
+    await movie.save();
     
     return response.status(201).json(result);
   } catch (e) {
     console.log(e);
-    await session.abortTransaction();
-    await session.endSession();
     return response.status(500).json({errors: ['Something went wrong.']});
   }
 });
