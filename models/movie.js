@@ -5,7 +5,7 @@ const {genreSchemaMongoose} = require('./genre');
 
 const movieSchema = Joi.object({
   title: Joi.string().required().min(3).max(255).trim(),
-  genreId: Joi.string().required().length(24),
+  genreId: Joi.objectId().required(),
   numberInStock: Joi.number().required().integer().min(0).max(255).default(0),
   dailyRentalRate: Joi.number().required().min(0).max(255).default(0)
 });

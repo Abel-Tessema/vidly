@@ -2,8 +2,8 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const rentalSchema = Joi.object({
-  customerId: Joi.string().required().length(24),
-  movieId: Joi.string().required().length(24)
+  customerId: Joi.objectId().required(),
+  movieId: Joi.objectId().required()
 });
 
 const rentalSchemaMongoose = new mongoose.Schema({

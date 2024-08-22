@@ -3,6 +3,7 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 Joi.preferences({abortEarly: false});
+Joi.objectId = require('joi-objectid')(Joi);
 
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
