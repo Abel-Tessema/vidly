@@ -3,6 +3,12 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 
 const {userSchema, User} = require('../models/user');
+const auth = require('../middleware/auth');
+
+router.get('/profile', auth, async (request, response) => {
+  const user = await User.findById(request.user._id).select('-password');
+  return response.json(user);
+});
 
 router.post('/', async (request, response) => {
   const {error, value} = userSchema.validate(request.body);

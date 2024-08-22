@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const auth = require('../middleware/auth');
 
 const {genreSchema, Genre} = require('../models/genre');
+const auth = require('../middleware/auth');
 
 router.get('/', async (request, response) => {
   const genres = await Genre.find().sort('name');
