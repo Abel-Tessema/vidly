@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const config = require('config');
 
 Joi.preferences({abortEarly: false});
 Joi.objectId = require('joi-objectid')(Joi);
@@ -11,6 +12,11 @@ const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+
+if (!config.get('jwtSecretKey')) {
+  console.error('FATAL ERROR: jwtSecretKey is not defined.');
+  process.exit(1);
+}
 
 const app = express();
 
