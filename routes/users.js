@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const _ = require('lodash');
 
 const {userSchema, User} = require('../models/user');
 
@@ -9,14 +10,10 @@ router.post('', async (request, response) => {
   let user = await User.findOne({email: value.email});
   if (user) return response.status(400).json({errors: ['There\'s already a user registered with that email.']});
   
-  user = new User({
-    name: value.name,
-    email: value.email,
-    password: value.password
-  });
+  user = new User(_.pick(value, ['name', 'email', 'password']));
   
   const result = await user.save();
-  return response.status(201).json(result);
+  return response.status(201).json(_.pick(result, ['_id', 'name', 'email']));
 });
 
 module.exports = router;

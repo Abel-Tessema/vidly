@@ -12,9 +12,9 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
-    "fawn": "^2.1.5",
     "joi": "^17.13.3",
     "joi-objectid": "^4.0.2",
+    "lodash": "^4.17.21",
     "mongoose": "^8.5.3"
   }
 }
