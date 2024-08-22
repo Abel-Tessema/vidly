@@ -16,12 +16,7 @@ router.get('/:id', async (request, response) => {
 
 router.post('/', async (request, response) => {
   const {error, value} = movieSchema.validate(request.body);
-  let {errors} = {errors: []};
-  if (error) {
-    for (let i = 0; i < error.details.length; i++)
-      errors.push(error.details[i].message);
-    return response.status(400).json({errors});
-  }
+  if (error) return response.status(400).json({errors: error.details.map(error => error.message)});
   
   const genre = await Genre.findById(value.genreId);
   if (!genre) return response.status(404).json({errors: ['There is no genre with that id number.']});
