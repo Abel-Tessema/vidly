@@ -28,12 +28,7 @@ router.post('/', async (request, response) => {
 
 router.put('/:id', async (request, response) => {
   const {error, value} = customerSchema.validate(request.body);
-  let {errors} = {errors: []};
-  if (error) {
-    for (let i = 0; i < error.details.length; i++)
-      errors.push(error.details[i].message);
-    return response.status(400).json(errors);
-  }
+  if (error) return response.status(400).json({errors: error.details.map(error => error.message)});
   
   try {
     const customer = await Customer.findByIdAndUpdate(request.params.id, {...value}, {new: true});
