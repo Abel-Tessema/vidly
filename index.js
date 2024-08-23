@@ -3,9 +3,12 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 const config = require('config');
 require('express-async-errors');
+const winston = require('winston');
 
 Joi.preferences({abortEarly: false});
 Joi.objectId = require('joi-objectid')(Joi);
+
+winston.add(new winston.transports.File({filename: 'logFile.log'}));
 
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
