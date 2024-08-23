@@ -1,7 +1,7 @@
-const winston = require('winston');
+const logger = require('../logger');
 
 function error(error, request, response, next) {
-  winston.error(error.message, error);
+  logger.error(error);
   return response.status(500).json({errors: ['Something went wrong.']});
 }
 
