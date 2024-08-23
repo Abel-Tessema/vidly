@@ -2,6 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const config = require('config');
+require('express-async-errors');
 
 Joi.preferences({abortEarly: false});
 Joi.objectId = require('joi-objectid')(Joi);
