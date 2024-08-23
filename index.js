@@ -8,12 +8,23 @@ const logger = require('./logger');
 process.on('uncaughtException', (e) => {
   console.error('We\'ve got an uncaught exception.');
   logger.error(e);
+  logger.on('finish', () => process.exit(1));
+  logger.end();
 });
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('We\'ve got an unhandled rejection.');
+  logger.error(reason);
+  logger.on('finish', () => process.exit(1));
+  logger.end();
+  });
 
 Joi.preferences({abortEarly: false});
 Joi.objectId = require('joi-objectid')(Joi);
 
 // throw new Error('Something went wrong during startup.');
+
+// Promise.reject(new Error('Something went sideways.'));
 
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
