@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const rentalSchema = Joi.object({
+const rentalSchemaJoi = Joi.object({
   customerId: Joi.objectId().required(),
   movieId: Joi.objectId().required()
 });
@@ -40,6 +40,6 @@ const rentalSchemaMongoose = new mongoose.Schema({
 
 const Rental = mongoose.model('Rental', rentalSchemaMongoose);
 
-module.exports.rentalSchema = rentalSchema; // Joi, for validation
+module.exports.rentalSchema = rentalSchemaJoi; // Joi, for validation
 module.exports.rentalSchemaMongoose = rentalSchemaMongoose; // Mongoose, for embedding documents
 module.exports.Rental = Rental;

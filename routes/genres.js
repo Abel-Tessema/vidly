@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const {genreSchema, Genre} = require('../models/genre');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 router.get('/', async (request, response) => {
   const genres = await Genre.find().sort('name');
@@ -37,7 +38,7 @@ router.put('/:id', auth, async (request, response) => {
   }
 });
 
-router.delete('/:id', auth, async (request, response) => {
+router.delete('/:id', auth, admin, async (request, response) => {
   const genre = await Genre.findByIdAndDelete(request.params.id);
   if (!genre) return response.status(404).json({errors: ['There is no genre with that id number.']});
   return response.json(genre);

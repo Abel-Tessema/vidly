@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const genreSchema = Joi.object({
+const genreSchemaJoi = Joi.object({
   name: Joi.string().required().min(3).max(255).trim(),
 });
 
@@ -23,6 +23,6 @@ const genreSchemaMongoose = new mongoose.Schema({
 
 const Genre = mongoose.model('Genre', genreSchemaMongoose);
 
-module.exports.genreSchema = genreSchema; // Joi, for validation
+module.exports.genreSchema = genreSchemaJoi; // Joi, for validation
 module.exports.genreSchemaMongoose = genreSchemaMongoose; // Mongoose, for embedding documents
 module.exports.Genre = Genre;

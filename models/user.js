@@ -14,7 +14,7 @@ const complexityOptions = {
   requirementCount: 4,
 };
 
-const userSchema = Joi.object({
+const userSchemaJoi = Joi.object({
   name: Joi.string().min(4).max(50).required(),
   email: Joi.string().email().required(),
   password: passwordComplexity(complexityOptions).required(),
@@ -24,13 +24,14 @@ const userSchemaMongoose = new mongoose.Schema({
   name: {type: String, minlength: 4, maxlength: 50, trim: true, required: true},
   email: {type: String, minlength: 5, maxlength: 255, unique: true, trim: true, required: true},
   password: {type: String, minlength: 4, maxlength: 1_024, trim: true, required: true},
+  isAdmin: {type: Boolean, default: false}
 });
 
 userSchemaMongoose.methods.generateAuthToken = function () {
-  return jwt.sign({_id: this._id}, config.get('jwtSecretKey'));
+  return jwt.sign({_id: this._id, isAdmin: this.isAdmin}, config.get('jwtSecretKey'));
 }
 
 const User = mongoose.model('User', userSchemaMongoose);
 
-module.exports.userSchema = userSchema;
+module.exports.userSchema = userSchemaJoi;
 module.exports.User = User;

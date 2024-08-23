@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 const {genreSchemaMongoose} = require('./genre');
 
-const movieSchema = Joi.object({
+const movieSchemaJoi = Joi.object({
   title: Joi.string().required().min(3).max(255).trim(),
   genreId: Joi.objectId().required(),
   numberInStock: Joi.number().required().integer().min(0).max(255).default(0),
@@ -19,5 +19,5 @@ const movieSchemaMongoose = new mongoose.Schema({
 
 const Movie = mongoose.model('Movie', movieSchemaMongoose);
 
-module.exports.movieSchema = movieSchema;
+module.exports.movieSchema = movieSchemaJoi;
 module.exports.Movie = Movie;
