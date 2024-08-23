@@ -4,11 +4,28 @@ const mongoose = require('mongoose');
 const config = require('config');
 require('express-async-errors');
 const winston = require('winston');
+require('winston-mongodb');
+const {format} = require("winston");
+const {combine, timestamp, printf} = format;
 
 Joi.preferences({abortEarly: false});
 Joi.objectId = require('joi-objectid')(Joi);
 
 winston.add(new winston.transports.File({filename: 'logFile.log'}));
+winston.add(new winston.transports.MongoDB({
+  db: 'mongodb://localhost/vidly',
+  options: {useUnifiedTopology: true},
+  level: 'error',
+  format: combine(
+    format.errors({stack: true}), // log the full stack
+    timestamp(), // get the time stamp part of the full log message
+    printf(({level, message, timestamp, stack}) => {
+      // formating the log outcome to show/store
+      return `${timestamp} ${level}: ${message} - ${stack}`;
+    }),
+    format.metadata() // >>>> ADD THIS LINE TO STORE the ERR OBJECT IN META field
+  ),
+}));
 
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
