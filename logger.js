@@ -14,6 +14,7 @@ const logger = winston.createLogger({
     metadata(),
   ),
   transports: [
+    new transports.Console({level: 'info'}),
     new transports.File({filename: 'logFile.log', format: json()}),
     new transports.MongoDB({
       db: 'mongodb://localhost/vidly',

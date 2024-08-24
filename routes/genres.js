@@ -5,7 +5,6 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 
 router.get('/', async (request, response) => {
-  throw new Error('Could not get the genres.');
   const genres = await Genre.find().sort('name');
   return response.json(genres);
 });
