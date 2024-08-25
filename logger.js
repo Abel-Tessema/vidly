@@ -9,7 +9,7 @@ const logger = winston.createLogger({
     errors({stack: true}),
     timestamp(),
     printf(({level, message, timestamp, stack}) =>
-      `${timestamp} ${level}: ${message} ${stack}` // For it to be formatted like this, you have to remove `format: json()`
+      `${timestamp} ${level}: ${message} ${stack ? stack : ''}` // For it to be formatted like this, you have to remove `format: json()`
     ),
     metadata(),
   ),
