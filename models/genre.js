@@ -1,22 +1,25 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+const minCharacters = 3;
+const maxCharacters = 50;
+
 const genreSchemaJoi = Joi.object({
-  name: Joi.string().required().min(3).max(255).trim(),
+  name: Joi.string().required().min(minCharacters).max(maxCharacters).trim(),
 });
 
 const genreSchemaMongoose = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 255,
+    minlength: minCharacters,
+    maxlength: maxCharacters,
     trim: true,
     validate: {
       validator: function(value) {
-        return (value) && (value.length >= 3) && (value.length <= 32);
+        return (value) && (value.length >= minCharacters) && (value.length <= maxCharacters);
       },
-      message: 'A genre needs a name that is 3 to 32 characters long.'
+      message: 'A genre needs a name that is 3 to 50 characters long.'
     }
   }
 });
