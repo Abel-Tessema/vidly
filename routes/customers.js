@@ -1,13 +1,14 @@
 const router = require('express').Router();
 
 const {customerSchema, Customer} = require('../models/customer');
+const validateObjectId = require('../middleware/validateObjectId');
 
 router.get('/', async (request, response) => {
   const customers = await Customer.find().sort('name');
   return response.json(customers);
 });
 
-router.get('/:id', async (request, response) => {
+router.get('/:id', validateObjectId, async (request, response) => {
   const customer = await Customer.findById(request.params.id);
   if (!customer) return response.status(404).json({errors: ['There is no customer with that id number.']});
   return response.json(customer);
@@ -26,7 +27,7 @@ router.post('/', async (request, response) => {
   return response.status(201).json(result);
 });
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', validateObjectId, async (request, response) => {
   const {error, value} = customerSchema.validate(request.body);
   if (error) return response.status(400).json({errors: error.details.map(error => error.message)});
   
@@ -40,7 +41,7 @@ router.put('/:id', async (request, response) => {
   }
 });
 
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', validateObjectId, async (request, response) => {
   const customer = await Customer.findByIdAndDelete(request.params.id);
   if (!customer) return response.status(404).json({errors: ['There is no customer with that id number.']});
   return response.json(customer);

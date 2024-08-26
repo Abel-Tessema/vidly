@@ -1,14 +1,15 @@
 const router = require('express').Router();
 
 const {movieSchema, Movie} = require('../models/movie');
-const {Genre} = require("../models/genre");
+const {Genre} = require('../models/genre');
+const validateObjectId = require('../middleware/validateObjectId');
 
 router.get('/', async (request, response) => {
   const movies = await Movie.find().sort('name');
   return response.json(movies);
 });
 
-router.get('/:id', async (request, response) => {
+router.get('/:id', validateObjectId, async (request, response) => {
   const movie = await Movie.findById(request.params.id);
   if (!movie) return response.status(404).json({errors: ['There is no movie with that id number.']});
   return response.json(movie);
@@ -32,7 +33,7 @@ router.post('/', async (request, response) => {
   return response.status(201).json(result);
 });
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', validateObjectId, async (request, response) => {
   const {error, value} = movieSchema.validate(request.body);
   let {errors} = {errors: []};
   if (error) {
@@ -63,7 +64,7 @@ router.put('/:id', async (request, response) => {
   }
 });
 
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', validateObjectId, async (request, response) => {
   const movie = await Movie.findByIdAndDelete(request.params.id);
   if (!movie) return response.status(404).json({errors: ['There is no movie with that id number.']});
   return response.json(movie);

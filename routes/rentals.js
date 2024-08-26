@@ -1,16 +1,16 @@
 const router = require('express').Router();
-const mongoose = require('mongoose');
 
 const {rentalSchema, Rental} = require('../models/rental');
 const {Movie} = require("../models/movie");
 const {Customer} = require("../models/customer");
+const validateObjectId = require('../middleware/validateObjectId');
 
 router.get('/', async (request, response) => {
   const rentals = await Rental.find().sort('-dateOut');
   return response.json(rentals);
 });
 
-router.get('/:id', async (request, response) => {
+router.get('/:id', validateObjectId,  async (request, response) => {
   const rental = await Rental.findById(request.params.id);
   if (!rental) return response.status(404).json({errors: ['There is no rental with that id number.']});
   return response.json(rental);
@@ -54,7 +54,7 @@ router.post('/', async (request, response) => {
   }
 });
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', validateObjectId, async (request, response) => {
   const rental = await Rental.findById(request.params.id);
   if (!rental) return response.status(404).json({errors: ['There is no rental with that id.']});
   
@@ -92,7 +92,7 @@ router.put('/:id', async (request, response) => {
   return response.json(result);
 });
 
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', validateObjectId, async (request, response) => {
   const rental = await Rental.findByIdAndDelete(request.params.id);
   if (!rental) return response.status(404).json({errors: ['There is no rental with that id.']});
   return response.json(rental);
