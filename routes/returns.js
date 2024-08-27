@@ -12,8 +12,12 @@ router.post('/', async (request, response) => {
     'customer._id': request.body.customerId,
     'movie._id': request.body.movieId
   });
+  
   if (!rental)
     return response.status(404).json({errors: ['There is no rental with the provided customerId and movieId.']});
+  
+  if (rental.dateReturned)
+    return response.status(400).json({errors: ['The return of the rental has already been processed.']});
   
   return response.status(401).json({errors: ['You are unauthorized.']});
 });

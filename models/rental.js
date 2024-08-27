@@ -27,7 +27,7 @@ const rentalSchemaMongoose = new mongoose.Schema({
   dateOut: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date
   },
   dateReturned: {
     type: Date
