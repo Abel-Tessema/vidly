@@ -1,5 +1,5 @@
 const winston = require("winston");
-require('winston-mongodb');
+// require('winston-mongodb');
 const {format, transports} = require("winston");
 const {combine, timestamp, printf, errors, metadata, json} = format;
 
@@ -16,10 +16,10 @@ const logger = winston.createLogger({
   transports: [
     new transports.Console({level: 'info'}),
     new transports.File({filename: 'logFile.log', format: json()}),
-    new transports.MongoDB({
-      db: 'mongodb://localhost/vidly',
-      options: {useUnifiedTopology: true},
-    })
+    // new transports.MongoDB({
+    //   db: 'mongodb://localhost/vidly',
+    //   options: {useUnifiedTopology: true},
+    // })
   ]
 });
 
