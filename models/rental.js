@@ -38,6 +38,21 @@ const rentalSchemaMongoose = new mongoose.Schema({
   }
 });
 
+rentalSchemaMongoose.statics.lookup = function(customerId, movieId) {
+  return this.findOne({ // Here, `this` references the class. Yep, JS is crazy.
+    'customer._id': customerId,
+    'movie._id': movieId
+  });
+};
+
+rentalSchemaMongoose.methods.return = function() {
+  this.dateReturned = new Date(); // Here, `this` references the object.
+  
+  const millisecondsInADay = 1_000 * 60 * 60 * 24;
+  const rentalDays = (this.dateReturned - this.dateOut) / millisecondsInADay;
+  this.rentalFee = this.movie.dailyRentalRate * rentalDays;
+}
+
 const Rental = mongoose.model('Rental', rentalSchemaMongoose);
 
 module.exports.rentalSchema = rentalSchemaJoi; // Joi, for validation
