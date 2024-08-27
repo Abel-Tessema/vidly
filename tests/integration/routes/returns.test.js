@@ -1,9 +1,9 @@
 /*
  * POST /api/returns {customerId, movieId}
  *
- * return a 401 status if the client is not logged in
- * return a 400 status if customerId is not provided
- * return a 400 status if movieId is not provided
+ * return a 401 status if the client is not logged in *
+ * return a 400 status if customerId is not provided *
+ * return a 400 status if movieId is not provided *
  * return a 404 status if there\'s no rental with the given customerId and movieId
  * return a 400 status if the rental is already processed
  * return a 200 status if it\'s a valid request
@@ -68,5 +68,11 @@ describe('/api/returns', () => {
     movieId = '';
     const response = await exec();
     expect(response.status).toBe(400);
+  });
+
+  it('return a 404 status if there\'s no rental with the given customerId and movieId', async () => {
+    await Rental.deleteMany(); // Because a rental is created in beforeEach().
+    const response = await exec();
+    expect(response.status).toBe(404);
   });
 });
