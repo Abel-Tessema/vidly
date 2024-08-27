@@ -4,6 +4,7 @@ const logger = require('./logger');
 
 require('./startup/logging')();
 require('./startup/validation')();
+require('./startup/production')(app);
 require('./startup/database')();
 require('./startup/routes')(app);
 require('./startup/config')();
