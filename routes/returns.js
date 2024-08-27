@@ -1,7 +1,9 @@
 const {Rental} = require("../models/rental");
 const router = require('express').Router();
+const auth = require('../middleware/auth');
+const {Movie} = require("../models/movie");
 
-router.post('/', async (request, response) => {
+router.post('/', auth, async (request, response) => {
   if (!request.body.customerId)
     return response.status(400).json({errors: ['The field \'customerId\' is required.']});
 
@@ -19,7 +21,17 @@ router.post('/', async (request, response) => {
   if (rental.dateReturned)
     return response.status(400).json({errors: ['The return of the rental has already been processed.']});
   
-  return response.status(401).json({errors: ['You are unauthorized.']});
+  rental.dateReturned = new Date();
+  const millisecondsInADay = 1_000 * 60 * 60 * 24;
+  const rentalDays = (rental.dateReturned - rental.dateOut) / millisecondsInADay;
+  rental.rentalFee = rental.movie.dailyRentalRate * rentalDays;
+  await rental.save();
+  
+  const movie = await Movie.findById(request.body.movieId);
+  movie.numberInStock++;
+  await movie.save();
+  
+  return response.status(201).json(rental);
 });
 
 module.exports = router;
